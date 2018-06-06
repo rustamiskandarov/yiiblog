@@ -142,4 +142,14 @@ class ArticleController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+    public function actionSetCategory($id)
+    {
+        $article = $this->findModel($id);
+
+        return $this->render('category', [
+            'article' => $article,
+        ]);
+
+    }
 }

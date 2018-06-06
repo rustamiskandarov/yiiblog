@@ -114,4 +114,9 @@ class Article extends \yii\db\ActiveRecord
     {
         return ($this->image)? '/uploads/' . $this->image : '/noimage.gif';
     }
+
+    public function getCategory()
+    {
+        return $this->hasOne(Category::className(), ['id' => 'category_id']);
+    }
 }
