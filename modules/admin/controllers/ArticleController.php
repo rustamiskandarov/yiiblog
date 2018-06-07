@@ -12,6 +12,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
+use app\models\Tag;
 
 /**
  * ArticleController implements the CRUD actions for Article model.
@@ -164,5 +165,28 @@ class ArticleController extends Controller
             'categories' => $categories,
         ]);
 
+    }
+
+    public function actionSetTags($id)
+    {
+        $article = $this->findModel($id);
+
+        $selectTags = $article->getSelectedTags();
+
+        $tags = ArrayHelper::map(Tag::find()->all(), 'id', 'title');
+
+        //если форма отправлена то переменной $tags присваиваем теги из формы tags
+        if(Yii::$app->request->isPost)
+        {
+            $tags = Yii::$app->request->post('tags');
+            $article->saveTags($tags);
+            return $this->redirect(['view', 'id'=>$article->id]);
+        }
+
+        return $this->render('tags', [
+            'article' => $article,
+            'selectTags' => $selectTags,
+            'tags' => $tags,
+        ]);
     }
 }
