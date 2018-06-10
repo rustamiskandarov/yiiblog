@@ -73,8 +73,15 @@ class ArticleController extends Controller
      */
     public function actionView($id)
     {
+        $article = $this->findModel($id); //вытаскиваем обект статьи по id
+        $selectTags = $article->getSelectedTags();
+//        foreach ($selectTags as $key => $value){
+//            echo "$value".",";
+//        }die;
+        //var_dump($selectTags);die;
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'selectTags' => $selectTags,
         ]);
     }
 
@@ -169,17 +176,17 @@ class ArticleController extends Controller
 
     public function actionSetTags($id)
     {
-        $article = $this->findModel($id);
+        $article = $this->findModel($id); //вытаскиваем обект статьи по id
 
-        $selectTags = $article->getSelectedTags();
+        $selectTags = $article->getSelectedTags(); // вытаскиваем теги которые уже были в статье
 
-        $tags = ArrayHelper::map(Tag::find()->all(), 'id', 'title');
+        $tags = ArrayHelper::map(Tag::find()->all(), 'id', 'title');//вытаскиваем список всех тегов применяя хелпер map для того чтобы вытащить нужные столбцы
 
-        //если форма отправлена то переменной $tags присваиваем теги из формы tags
+        //если форма отправлена то переменной $tags присваиваем теги из формы tags это происходит при нажатии на кнопку Send
         if(Yii::$app->request->isPost)
         {
-            $tags = Yii::$app->request->post('tags');
-            $article->saveTags($tags);
+            $tags = Yii::$app->request->post('tags'); //присваеваем переменной значения из формы tags
+            $article->saveTags($tags); // сохраняем новые значения тегов
             return $this->redirect(['view', 'id'=>$article->id]);
         }
 

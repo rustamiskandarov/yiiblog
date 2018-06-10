@@ -132,13 +132,13 @@ class Article extends \yii\db\ActiveRecord
 
     public function saveTags($tags)
     {
-        if(is_array($tags))
+        if(is_array($tags)) //если массив то
         {
-            $this->cleanCurrentTags();
+            $this->cleanCurrentTags();  //удаляем старые значения тегов
 
-            foreach ($tags as $tag_id){
-                $tag = Tag::findOne($tag_id);
-                $this->link('tags', $tag);
+            foreach ($tags as $tag_id){ //проходим по циклу
+                $tag = Tag::findOne($tag_id);   //присваеваем тег по айдишнику из списка всех тегов
+                $this->link('tags', $tag);  //при помощи link создаем связь согласно getTags()
             }
         }
     }
@@ -150,7 +150,7 @@ class Article extends \yii\db\ActiveRecord
 
     public function getTags()
     {
-        return $this->hasMany(Tag::className(), ['id' => 'tag_id'])->viaTable('article_tag', ['article_id' => 'id']);
+        return $this->hasMany(Tag::className(), ['id' => 'tag_id'])->viaTable('article_tag', ['article_id' => 'id']); //связь многие к многим с применением третей таблицы
     }
 
     public function getSelectedTags()

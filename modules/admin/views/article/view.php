@@ -47,6 +47,15 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'user_id',
 //            'status',
             'category_id',
+            [
+                    'format' => 'html',
+                    'label' => 'Tags',
+                    'value' => function($selectTags){
+                        foreach ($selectTags as $key => $value){
+                            return Html::tag('p', Html::encode($value));
+                        }
+                    }
+            ],
         ],
     ]) ?>
 
