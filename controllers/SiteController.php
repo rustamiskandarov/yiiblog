@@ -2,7 +2,10 @@
 
 namespace app\controllers;
 
+use app\models\Article;
+use app\models\Category;
 use Yii;
+use yii\data\Pagination;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
@@ -61,7 +64,18 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $data = Article::getAll();
+        $popular = Article::getPopular();
+        $last = Article::getLast();
+        $categoryes = Category::getAll();
+
+        return $this->render('index',[
+            'models' => $data['articles'],
+            'pages' => $data['pagination'],
+            'popular' => $popular,
+            'last' => $last,
+            'categoryes' => $categoryes,
+        ]);
     }
 
     /**
@@ -69,6 +83,48 @@ class SiteController extends Controller
      *
      * @return Response|string
      */
+
+    public function actionView($id)
+    {
+        $data = Article::getAll();
+        $article = Article::findOne($id);
+        $popular = Article::getPopular();
+        $last = Article::getLast();
+        $categoryes = Category::getAll();
+
+        return $this->render('single', [
+            'models' => $data['articles'],
+            'pages' => $data['pagination'],
+            'article' => $article,
+            'popular' => $popular,
+            'last' => $last,
+            'categoryes' => $categoryes,
+        ]);
+    }
+
+    public function actionCategory($id)
+    {
+        $query = Article::find()->where(['category_id' => $id]);
+        $count = $query->count();
+        $pages = new Pagination(['totalCount' => $count, 'pageSize'=>9]);
+
+        $models = $query->offset($pages->offset)
+            ->limit($pages->limit)
+            ->all();
+        $popular = Article::getPopular();
+        $last = Article::getLast();
+        $categoryes = Category::getAll();
+        return $this->render('category', [
+            'models' => $models,
+            'pages' => $pages,
+            'popular' => $popular,
+            'last' => $last,
+            'categoryes' => $categoryes,
+        ]);
+    }
+
+
+
     public function actionLogin()
     {
         if (!Yii::$app->user->isGuest) {

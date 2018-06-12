@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -116,11 +117,25 @@ class Article extends \yii\db\ActiveRecord
         return ($this->image)? '/uploads/' . $this->image : '/noimage.gif';
     }
 
+
+
     public function getCategory()
     {
         return $this->hasOne(Category::className(), ['id' => 'category_id']);
     }
 
+//    public function getTitleCategory()
+//    {
+//        $category = $this->getCategory();
+//        echo ('<pre>');
+//        var_dump($category);
+//        echo ('</pre>');die;
+//    }
+    /**
+     * @param $category_id
+     * @return bool
+     * description присвоение вовой категории и сохранение в БД
+     */
     public function saveCategory($category_id)
     {
         $category = Category::findOne($category_id);
@@ -130,6 +145,10 @@ class Article extends \yii\db\ActiveRecord
         }
     }
 
+    /**
+     * @param $tags
+     * description сохранение новых тегов в таблицу БД
+     */
     public function saveTags($tags)
     {
         if(is_array($tags)) //если массив то
@@ -143,19 +162,75 @@ class Article extends \yii\db\ActiveRecord
         }
     }
 
+    /**
+     * @return int
+     * description удаление всех текущих тегов в статье
+     */
     public function cleanCurrentTags()
     {
         return ArticleTag::deleteAll(['article_id'=>$this->id]);
     }
 
+    /**
+     * @return $this
+     * description связь многие к многим с применением третей таблицы
+     */
     public function getTags()
     {
-        return $this->hasMany(Tag::className(), ['id' => 'tag_id'])->viaTable('article_tag', ['article_id' => 'id']); //связь многие к многим с применением третей таблицы
+        return $this->hasMany(Tag::className(), ['id' => 'tag_id'])->viaTable('article_tag', ['article_id' => 'id']);
     }
 
+    /**
+     * @return string
+     */
+
+    public function getDate()
+    {
+        return Yii::$app->formatter->asDate($this->date);
+    }
+
+    /**
+     * @return array
+     */
     public function getSelectedTags()
     {
         $selectTags = $this->getTags()->select('id')->asArray()->all();
         return ArrayHelper::getColumn($selectTags, 'id');
     }
+
+    /**
+     * @param int $pageSize
+     * @return array
+     */
+    public static function getAll($pageSize = 6){
+        $query = Article::find();
+        $count = $query->count();
+        $pages = new Pagination(['totalCount' => $count, 'pageSize'=>$pageSize]);
+
+        $models = $query->offset($pages->offset)
+            ->limit($pages->limit)
+            ->all();
+        $data['articles'] = $models;
+        $data['pagination'] = $pages;
+
+        return $data;
+    }
+
+    /**
+     * @param int $limPop
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function getPopular($limPop = 3){
+        return Article::find()->orderBy('viewed desc')->limit($limPop)->all();
+    }
+
+    /**
+     * @param int $limLast
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function getLast($limLast = 4)
+    {
+        return Article::find()->orderBy('date desc')->limit($limLast)->all();
+    }
+
 }
