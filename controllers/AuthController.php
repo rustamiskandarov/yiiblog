@@ -20,11 +20,15 @@ class AuthController extends Controller
     public function actionLogin()
     {
         if (!Yii::$app->user->isGuest) {
+            //die("Пользователь авторизован");
             return $this->goHome();
         }
+        //die("Пользователь гость");
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            //$usr = Yii::$app->user->isGuest;
+            //var_dump(Yii::$app->user->identity->name);die;
             return $this->goBack();
         }
 

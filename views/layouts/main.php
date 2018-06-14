@@ -89,7 +89,9 @@ PublicAsset::register($this);
                             <?php if(Yii::$app->user->isGuest):?>
                                 <li><a href="<?= Url::toRoute(['/auth/login'])?>">Войти</a></li>
                                 <li><a href="<?= Url::toRoute(['/auth/signup'])?>">Регистрация</a></li>
-                            <?php else: ?>
+                            <?php endif;?>
+
+                            <?php if(!Yii::$app->user->isGuest):?>
                                 <?= Html::beginForm(['/auth/logout'], 'post')
                                 . Html::submitButton(
                                     'Выйти (' . Yii::$app->user->identity->name . ')',

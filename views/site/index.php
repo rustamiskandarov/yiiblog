@@ -15,7 +15,7 @@ $this->title = 'My Yii Application';
                 <?php foreach ($models as $model):?>
                     <article class="post">
                         <div class="post-thumb">
-                            <a href="blog.html"><img src="<?= $model->getImage()?>" alt=""></a>
+                            <a href="<?= $model->getImage()?>"><img src="<?= $model->getImage()?>" alt=""></a>
 
                             <a href="<?= Url::toRoute(['site/view', 'id'=>$model->id]);?>" class="post-thumb-overlay text-center">
                                 <div class="text-uppercase text-center">View Post</div>
