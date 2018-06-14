@@ -12,7 +12,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-login">
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-8 col-lg-offset-1">
             <h1><?= Html::encode($this->title) ?></h1>
 
             <p>Please fill out the following fields to login:</p>
@@ -21,8 +21,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'id' => 'login-form',
                 'layout' => 'horizontal',
                 'fieldConfig' => [
-                    'template' => "{label}\n<div class=\"col-lg-3\">{input}</div>\n<div class=\"col-lg-8\">{error}</div>",
-                    'labelOptions' => ['class' => 'col-lg-1 control-label'],
+                    'template' => "{label}\n<div class=\"col-lg-5\">{input}</div>\n<div class=\"col-lg-5\">{error}</div>",
+                    'labelOptions' => ['class' => 'col-lg-2 control-label'],
                 ],
             ]); ?>
 
@@ -44,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         </div>
         <div class="col-md-2">
-            <p>VK Widget</p>
+            <p>Вход через ВКонтакте</p>
             <script type="text/javascript" src="https://vk.com/js/api/openapi.js?154"></script>
             <script type="text/javascript">
                 VK.init({apiId: 6605268});
@@ -53,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <!-- VK Widget -->
             <div id="vk_auth"></div>
             <script type="text/javascript">
-                VK.Widgets.Auth("vk_auth", {"authUrl":"/dev/Login"});
+                VK.Widgets.Auth("vk_auth", {"authUrl":"/auth/login-vk"});
             </script>
         </div>
     </div>
