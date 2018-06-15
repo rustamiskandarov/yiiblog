@@ -55,6 +55,23 @@ class AuthController extends Controller
      * @return Response|string
      */
 
+    public function actionTest()
+    {
+        //echo phpinfo();exit;
+        $user = User::findOne(1);
+        //Yii::$app->user->login($user);
+        if(Yii::$app->user->isGuest){
+            echo "Пользователь не авторизован";
+            //var_dump(Yii::$app->user->isGuest);
+            var_dump(Yii::$app->user);
+        } else{
+            echo "Пользователь авторизован";
+            var_dump(Yii::$app->user->isGuest);
+            var_dump(Yii::$app->user);
+        };
+        die;
+    }
+    
     public function actionSignup()
     {
         $model = new SignupForm();

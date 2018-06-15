@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
 /**
@@ -17,7 +18,7 @@ use yii\web\IdentityInterface;
  *
  * @property Comment[] $comments
  */
-class User extends \yii\db\ActiveRecord implements IdentityInterface
+class User extends ActiveRecord implements IdentityInterface
 {
     /**
      * @inheritdoc

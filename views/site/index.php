@@ -11,7 +11,6 @@ $this->title = 'My Yii Application';
     <div class="container">
         <div class="row">
             <div class="col-md-8">
-
                 <?php foreach ($models as $model):?>
                     <article class="post">
                         <div class="post-thumb">
